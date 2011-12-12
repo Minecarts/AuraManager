@@ -1,7 +1,5 @@
 package com.minecarts.auramanager;
 
-import java.util.BitSet;
-
 public enum Flag {
     BLOCK_PLACE(0), // prevent placing a block
     BLOCK_BREAK(1), // prevent destroying a block, trampling plants, etc.
@@ -74,18 +72,20 @@ public enum Flag {
     
     ;
     
-    private final BitSet bits = new BitSet();
+    private final int value;
     
-    private Flag(int index) {
-        bits.set(index, true);
+    private Flag(int bit) {
+        value = 1 << bit;
     }
     private Flag(Flag... flags) {
+        int total = 0;
         for(Flag flag : flags) {
-            bits.and(flag.bits);
+            total |= flag.value;
         }
+        value = total;
     }
     
-    public BitSet getBits() {
-        return (BitSet) bits.clone();
+    public int toInt() {
+        return value;
     }
 }

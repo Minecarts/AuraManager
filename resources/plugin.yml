@@ -1,0 +1,8 @@
+name: AuraManager
+description: GuardianBlocks aura management
+author: megabytes
+website: http://minecarts.com/
+
+main: com.minecarts.auramanager.AuraManager
+version: ${pom.version}
+depend: [DBQuery]

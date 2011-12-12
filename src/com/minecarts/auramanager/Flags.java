@@ -1,43 +1,49 @@
 package com.minecarts.auramanager;
 
-import java.util.BitSet;
-
 public class Flags {
-    private final BitSet bits = new BitSet();
+    private final int value;
+    
+    private Flags(int value) {
+        this.value = value;
+    }
     
     public Flags(Flag... flags) {
+        int total = 0;
         for(Flag flag : flags) {
-            bits.or(flag.getBits());
+            total |= flag.toInt();
         }
-    }
-    
-    @Override
-    public String toString() {
-        return bits.toString();
-    }
-    public long toLong() {
-        return Long.parseLong(bits.toString(), 2);
-    }
-    public int toInt() {
-        return Integer.parseInt(bits.toString(), 2);
+        value = total;
     }
     
     @Override
     public boolean equals(Object obj) {
         if(obj == null) return false;
         if(obj == this) return true;
-        if(obj instanceof Flags) return bits.equals(((Flags) obj).bits);
-        if(obj instanceof BitSet) return bits.equals((BitSet) obj);
+        if(obj instanceof Flags) return value == ((Flags) obj).value;
         return false;
     }
     @Override
     public int hashCode() {
-        return bits.hashCode();
+        return value;
     }
     
+    public int toInt() {
+        return value;
+    }
+    @Override
+    public String toString() {
+        return Integer.toBinaryString(value);
+    }
+    
+    public static Flags fromInt(int value) {
+        return new Flags(value);
+    }
+    public static Flags fromString(String binary) {
+        return new Flags(Integer.parseInt(binary, 2));
+    }
+    
+    
     public boolean has(Flag flag) {
-        Flags flags = new Flags(flag);
-        flags.bits.and(this.bits);
-        return equals(flags);
+        return (value & flag.toInt()) > 0;
     }
 }
